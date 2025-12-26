@@ -2,6 +2,7 @@
 :root {
   /* Colors */
   --color-bg: #050816;
+  --color-bg-animated: #050816;
   --color-bg-elevated: #090f23;
   --color-bg-soft: #0f172a;
   --color-border-subtle: rgba(148, 163, 184, 0.35);
@@ -64,7 +65,7 @@ body {
     radial-gradient(circle at 0 120%, #22c55e 0, transparent 55%),
     radial-gradient(circle at 100% 120%, #0ea5e9 0, transparent 55%),
     radial-gradient(circle at top right, #4c1d95 0, transparent 55%),
-    var(--color-bg);
+    var(--color-bg-animated);
   color: var(--color-text-main);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
