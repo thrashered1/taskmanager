@@ -6,6 +6,8 @@ const taskCountLabel = document.getElementById("task-count");
 const clearCompletedButton = document.getElementById("clear-completed");
 const datePill = document.getElementById("current-date");
 
+let bgAnimationId = null;
+
 // SECTION: State
 let tasks = [];
 let taskIdCounter = 0;
@@ -13,20 +15,37 @@ let taskIdCounter = 0;
 // Load tasks from localStorage so the list persists per browser
 function loadTasks() {
   const stored = window.localStorage.getItem("focuslist.tasks");
-  if (!stored) return;
-  try {
-    const parsed = JSON.parse(stored);
-    if (Array.isArray(parsed)) {
-      tasks = parsed;
-      taskIdCounter = tasks.reduce((max, t) => Math.max(max, t.id), 0) + 1;
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) {
+        tasks = parsed;
+        taskIdCounter = tasks.reduce((max, t) => Math.max(max, t.id), 0) + 1;
+      }
+    } catch (e) {
+      console.error("Failed to parse stored tasks", e);
     }
-  } catch (e) {
-    console.error("Failed to parse stored tasks", e);
   }
 }
 
 function saveTasks() {
   window.localStorage.setItem("focuslist.tasks", JSON.stringify(tasks));
+}
+
+// SECTION: Animated Background
+function startBackgroundAnimation() {
+  let hue = 0;
+
+  function step() {
+    hue = (hue + 0.2) % 360;
+    const color = `hsl(${hue}, 70%, 8%)`;
+    document.documentElement.style.setProperty("--color-bg-animated", color);
+    bgAnimationId = requestAnimationFrame(step);
+  }
+
+  if (bgAnimationId === null) {
+    bgAnimationId = requestAnimationFrame(step);
+  }
 }
 
 // SECTION: Rendering
@@ -178,6 +197,7 @@ function initDatePill() {
 function init() {
   loadTasks();
   initDatePill();
+  startBackgroundAnimation();
   renderTasks();
 }
 
